@@ -21,7 +21,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             username = dictionary['username']
             password = dictionary['password']
 
-            mariadb_connection = mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
+            mariadb_connection = mariadb.connect(user='root', password='password', database='team22demand', port=6022)
             cursor = mariadb_connection.cursor()
             cursor.execute("SELECT username, password FROM customers")
             rows = cursor.fetchall()

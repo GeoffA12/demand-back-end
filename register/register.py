@@ -12,7 +12,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print(path)
         print("/registerHandler")
         if path == "/registerHandler":
-            mariadb_connection = mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
+            mariadb_connection = mariadb.connect(user='root', password='password', database='team22demand', port=6022)
             cursor = mariadb_connection.cursor()
             cursor.execute("SELECT username FROM customers")
             rows = cursor.fetchall()
