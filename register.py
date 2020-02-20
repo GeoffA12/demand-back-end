@@ -15,7 +15,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print("/registerHandler")
 
         responseDict = {}
-
         responseDict['Success'] = False
 
         if path == "/registerHandler":
