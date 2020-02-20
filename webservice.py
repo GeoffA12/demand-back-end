@@ -9,28 +9,25 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     ver = '1.0'
 
     def connectToMariaDB(self):
-        mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
+        return mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
+
+    # How to convert the body from a string to a dictionary
+    # use 'loads' to convert from byte/string to a dictionary!
+    def getJSPost(self):
+        length = int(self.headers['content-length'])
+        body = self.rfile.read(length)
+        return json.loads(body)
 
     def do_POST(self):
         path = self.path
         print(path)
-        print("/registerHandler")
-
+        status = None
         responseDict = {}
         responseDict['Success'] = False
 
+        # If we are receiving a request to register an account
         if "/registerHandler" in path:
-            mariadb_connection = connectToMariaDB()
-            cursor = mariadb_connection.cursor()
-            cursor.execute("SELECT username FROM customers")
-            rows = cursor.fetchall()
-            usernames = [x[0] for x in rows]
-            length = int(self.headers['content-length'])
-            body = self.rfile.read(length)
-
-            # How to convert the body from a string to a dictionary
-            # use 'loads' to convert from byte/string to a dictionary!
-            dictionary = json.loads(body)
+            dictionary = getJSPost()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -38,11 +35,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             email = dictionary['email']
             phone = dictionary['phoneNumber']
 
+            mariadb_connection = connectToMariaDB()
+            cursor = mariadb_connection.cursor()
+            cursor.execute("SELECT username FROM customers")
+            rows = cursor.fetchall()
+            usernames = [x[0] for x in rows]
+
             userAlreadyExists = False
             for x in usernames:
                 if x == username:
                     userAlreadyExists = True
-
             status = None
             if userAlreadyExists:
                 status = 401
@@ -54,19 +56,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)",
                                   (username, password, email, phone))
                 mariadb_connection.commit()
-
             print(status)
             responseDict['Success'] = True
 
-            self.send_response(status)
-            self.end_headers()
-
+        # If we are receiving a request for a client to long into the website
         elif "/loginHandler" in path:
-            length = int(self.headers['content-length'])
-            body = self.rfile.read(length)
-            # How to convert the body from a string to a dictionary
-            # use 'loads' to convert from byte/string to a dictionary!
-            dictionary = json.loads(body)
+            dictionary = getJSPost()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -78,6 +73,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             rows = cursor.fetchall()
             username_list = [x[0] for x in rows]
             password_list = [x[1] for x in rows]
+
             # check all usernames and passwords in the table to make sure we're keeping our usernames unique
             userAlreadyExists = False
             for (x, y) in zip(username_list, password_list):
@@ -86,32 +82,21 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 if (x == username and y == password):
                     userAlreadyExists = True
                     break
-            response = None
+            status = None
             # We'll send a 401 code back to the client if the user hasn't registered in our database
             if (userAlreadyExists):
-                response = 200
+                status = 200
             else:
-                response = 401
-            print(response)
-            self.send_response(response)
-            self.end_headers()
-            responseDict = {}
-            responseDict['success'] = True
-            responseDict['otherParams'] = "here"
-            res = json.dumps(responseDict)
-            bytesStr = res.encode('utf-8')
-            self.wfile.write(bytesStr)
+                status = 401
+            print(status)
+            responseDict['Success'] = True
 
-        elif path == f'{dir}orderHandler':
-            mariadb_connection = connectToMariaDB()
-            cursor = mariadb_connection.cursor()
 
-            length = int(self.headers['content-length'])
-            body = self.rfile.read(length)
-
-            dictionary = json.loads(body)
+        elif '/orderHandler' in path:
+            dictionary = getJSBody()
             print(dictionary)
 
+            mariadb_connection = connectToMariaDB()
             cursor = mariadb_connection.cursor()
             cursor.execute("INSERT INTO orders") # Need to solidify order table
             mariadb_connection.commit()
@@ -124,12 +109,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             if 200 <= status < 300:
                 responseDict['Vehicle Info'] = response.json()
 
-            self.send_response(status)
-            self.end_headers()
         else:
-            self.send_response(404)
-            self.end_headers()
+            status = 404
 
+        self.send_response(status)
+        self.end_headers()
         res = json.dumps(responseDict)
         bytesStr = res.encode('utf-8')
         self.wfile.write(bytesStr)
