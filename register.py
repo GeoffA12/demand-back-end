@@ -5,12 +5,19 @@ import urllib.parse
 import mysql.connector as mariadb
 
 
+
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
+    dir = '/home/team22/'
     def do_POST(self):
         path = self.path
         print(path)
         print("/registerHandler")
+
+        responseDict = {}
+
+        responseDict['Success'] = False
+
         if path == "/registerHandler":
             mariadb_connection = mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
             cursor = mariadb_connection.cursor()
@@ -35,30 +42,31 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 if (x == username):
                     userAlreadyExists = True
 
-            response = None
+            status = None
             if (userAlreadyExists):
-                response = 401
+                status = 401
             else:
-                response = 200
+                status = 200
                 newCursor = mariadb_connection.cursor()
                 print(username)
                 print(password)
                 newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)", (username, password, email, phone))
                 mariadb_connection.commit()
-            print(response)
-            self.send_response(response)
+
+            print(status)
+            responseDict['Success'] = True
+
+            self.send_response(status)
             self.end_headers()
-            responseDict = {}
-            responseDict['success'] = True
-            responseDict['otherParams'] = "here"
-            res = json.dumps(responseDict)
-            bytesStr = res.encode('utf-8')
-            self.wfile.write(bytesStr)
+
         else:
             print("I got to your handler but I didn't find the correct path")
-            #self.wfile.write(p.encode('utf-8'))
             self.send_response(405)
             self.end_headers()
+
+        res = json.dumps(responseDict)
+        bytesStr = res.encode('utf-8')
+        self.wfile.write(bytesStr)
 
     def do_GET(self):
         print("got")
