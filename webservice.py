@@ -5,15 +5,15 @@ import urllib.parse
 import mysql.connector as mariadb
 import requests
 
+def connectToMariaDB():
+    return mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
+
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     ver = '1.0'
 
-    def connectToMariaDB(self):
-        return mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
-
     # How to convert the body from a string to a dictionary
     # use 'loads' to convert from byte/string to a dictionary!
-    def getJSPost(self):
+    def getPOSTBody(self):
         length = int(self.headers['content-length'])
         body = self.rfile.read(length)
         return json.loads(body)
@@ -21,13 +21,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         path = self.path
         print(path)
-        status = None
-        responseDict = {}
-        responseDict['Success'] = False
+        responseDict = {'Success': False}
 
         # If we are receiving a request to register an account
         if "/registerHandler" in path:
-            dictionary = getJSPost()
+            dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -61,7 +59,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # If we are receiving a request for a client to long into the website
         elif "/loginHandler" in path:
-            dictionary = getJSPost()
+            dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -79,12 +77,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             for (x, y) in zip(username_list, password_list):
                 print(x)
                 print(y)
-                if (x == username and y == password):
+                if x == username and y == password:
                     userAlreadyExists = True
                     break
             status = None
             # We'll send a 401 code back to the client if the user hasn't registered in our database
-            if (userAlreadyExists):
+            if userAlreadyExists:
                 status = 200
             else:
                 status = 401
@@ -93,7 +91,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
         elif '/orderHandler' in path:
-            dictionary = getJSBody()
+            dictionary = self.getPOSTBody()
             print(dictionary)
 
             mariadb_connection = connectToMariaDB()
