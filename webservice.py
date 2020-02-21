@@ -91,6 +91,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             dictionary = self.getPOSTBody()
             print(dictionary)
 
+            # Need finish what the table insert is, will be based off what DB table.
             mariadb_connection = connectToMariaDB()
             cursor = mariadb_connection.cursor()
             cursor.execute("INSERT INTO orders") # Need to solidify order table
