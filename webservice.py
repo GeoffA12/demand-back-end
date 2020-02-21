@@ -13,7 +13,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     # How to convert the body from a string to a dictionary
     # use 'loads' to convert from byte/string to a dictionary!
-    def getPOSTBody(self):
+    def getJSPost(self):
         length = int(self.headers['content-length'])
         body = self.rfile.read(length)
         return json.loads(body)
@@ -27,7 +27,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # If we are receiving a request to register an account
         if "/registerHandler" in path:
-            dictionary = getPOSTBody()
+            dictionary = getJSPost()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -61,7 +61,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # If we are receiving a request for a client to long into the website
         elif "/loginHandler" in path:
-            dictionary = getPOSTBody()
+            dictionary = getJSPost()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
@@ -92,8 +92,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             responseDict['Success'] = True
 
 
-        elif path.endswith('/orderHandler'):
-            dictionary = getPOSTBody()
+        elif '/orderHandler' in path:
+            dictionary = getJSBody()
             print(dictionary)
 
             mariadb_connection = connectToMariaDB()
@@ -103,7 +103,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
             # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
             # dictionary information.
-            response = requests.post("https://supply.team22.softwareengineeringii.com/api/cs/vehicles", dictionary)
+            response = requests.post("https://supply.team22.softwareengineeringii.com/api/cs/vehicleRequest", dictionary)
             status = response.status_code
             responseDict['Status'] = status
             if 200 <= status < 300:
