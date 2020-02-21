@@ -2,67 +2,64 @@ import http.server
 from http.server import BaseHTTPRequestHandler
 import json
 import urllib.parse
-import mysql.connector as mariadb
+import mysql.connector as sqldb
 
 
+
+def connectToSQLDB():
+    return sqldb.connect(user='root', password='password', database='team22demand', port=6022)
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    ver = '1.0'
 
-    dir = '/home/team22/'
+    # How to convert the body from a string to a dictionary
+    # use 'loads' to convert from byte/string to a dictionary!
+    def getPOSTBody(self):
+        length = int(self.headers['content-length'])
+        body = self.rfile.read(length)
+        return json.loads(body)
+
     def do_POST(self):
         path = self.path
         print(path)
-        print("/registerHandler")
+        responseDict = {'Success': False}
 
-        responseDict = {}
-        responseDict['Success'] = False
-
-        if path == "/registerHandler":
-            mariadb_connection = mariadb.connect(user='root', password='ShinyNatu34', database='team22demand')
-            cursor = mariadb_connection.cursor()
-            cursor.execute("SELECT username FROM customers")
-            rows = cursor.fetchall()
-            usernames = [x[0] for x in rows]
-            length = int(self.headers['content-length'])
-            body = self.rfile.read(length)
-
-            	# How to convert the body from a string to a dictionary
-            	# use 'loads' to convert from byte/string to a dictionary!
-            dictionary = json.loads(body)
-            	# To access a specific key from the dictionary:
+        # If we are receiving a request to register an account
+        if "/registerHandler" in path:
+            dictionary = self.getPOSTBody()
+            # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
             password = dictionary['password']
             email = dictionary['email']
             phone = dictionary['phoneNumber']
 
-            userAlreadyExists = False
-            for x in usernames:
-                if (x == username):
-                    userAlreadyExists = True
+            sqlConnection = connectToSQLDB()
+            cursor = sqlConnection.cursor()
+            cursor.execute("SELECT username FROM customers")
+            rows = cursor.fetchall()
+            usernameList = [x[0] for x in rows]
 
-            status = None
-            if (userAlreadyExists):
+            # The equivalent of arr.contains(e)
+            if username in usernameList:
                 status = 401
             else:
                 status = 200
-                newCursor = mariadb_connection.cursor()
+                newCursor = sqlConnection.cursor()
                 print(username)
                 print(password)
-                newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)", (username, password, email, phone))
-                mariadb_connection.commit()
+                newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)",
+                                  (username, password, email, phone))
+                sqlConnection.commit()
+                responseDict['Success'] = True
 
             print(status)
-            responseDict['Success'] = True
-
-            self.send_response(status)
-            self.end_headers()
 
         else:
-            print("I got to your handler but I didn't find the correct path")
-            self.send_response(405)
-            self.end_headers()
+            status = 404
 
+        self.send_response(status)
+        self.end_headers()
         res = json.dumps(responseDict)
         bytesStr = res.encode('utf-8')
         self.wfile.write(bytesStr)
