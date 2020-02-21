@@ -43,7 +43,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             for x in usernames:
                 if x == username:
                     userAlreadyExists = True
-            status = None
             if userAlreadyExists:
                 status = 401
             else:
@@ -80,7 +79,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 if x == username and y == password:
                     userAlreadyExists = True
                     break
-            status = None
             # We'll send a 401 code back to the client if the user hasn't registered in our database
             if userAlreadyExists:
                 status = 200
@@ -88,7 +86,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 status = 401
             print(status)
             responseDict['Success'] = True
-
 
         elif '/orderHandler' in path:
             dictionary = self.getPOSTBody()
@@ -103,8 +100,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             # dictionary information.
             response = requests.post("https://supply.team22.softwareengineeringii.com/api/cs/vehicleRequest", dictionary)
             status = response.status_code
-            responseDict['Status'] = status
-            if 200 <= status < 300:
+            print(status)
+            if status == 200:
                 responseDict['Vehicle Info'] = response.json()
 
         else:
