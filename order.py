@@ -29,33 +29,36 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
-            type = dictionary['serviceType']
+            sType = dictionary['serviceType']
             destination = dictionary['destination']
 
             print(username)
+            print(type)
+            print(destination)
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
             cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
-            custid = cursor.fetchone()[0]
+            custid = cursor.fetchone()[:-1]
             print(custid)
-            print(type)
-            print(destination)
-            cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
-                           (custid, type, destination))
-            sqlConnection.commit()
+            if custid is not None:
+                cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
+                               (custid, sType, destination))
+                sqlConnection.commit()
 
-            # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
-            # dictionary information.
-#            response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
-#            status = response.status_code
-            status = 200
-          #  if status == 200:
-               # responseDict['Vehicle Info'] = response.json()
-
+                # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
+                # dictionary information.
+                # response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
+                # status = response.status_code
+                status = 200
+                # if status == 200:
+                #     responseDict['Vehicle Info'] = response.json()
+            else:
+                status = 400
         else:
             status = 404
 
+        print(status)
         self.send_response(status)
         self.end_headers()
         res = json.dumps(responseDict)

@@ -17,3 +17,7 @@ Improved some naming
 18:21
 Finished order table insert.
 Prettied up register.py customer insert
+
+22/2/2020
+14:46
+Added NoneType exception handling for orders
