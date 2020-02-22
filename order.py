@@ -28,10 +28,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
+            username = dictionary["username"]
+            type = dictionary["type"]
+            destination = dictionary["destination"]
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
-            cursor.execute("INSERT INTO orders")  # Need to solidify order table
+            cursor.execute(f"SELECT custid FROM customers WHERE username = {username}")
+            custid = cursor.fetchall()
+            cursor.execute(f"INSERT INTO orders (custid, type, destination) VALUES "
+                           f"({custid}, {type}, {destination})")
             sqlConnection.commit()
 
             # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
@@ -51,15 +57,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytesStr)
 
     def do_GET(self):
-        path = self.path
-        print(path)
-
-        if "orderHanlder" in path:
-            print('do stuff')
-            # Do stuff
-
-        else:
-            print("I got to your handler but I didn't find the correct path")
-            # self.wfile.write(p.encode('utf-8'))
-            self.send_response(405)
-            self.end_headers()
+        print("got")
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write("response body \r\n")

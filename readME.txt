@@ -13,3 +13,7 @@ Trying to reduce duplicate code. Adding helper function and consolidating respon
 No need to one big file for now. Want to test individual handlers first, then we'll consolidate
 Optimised and compressed login and register handler a bit
 Improved some naming
+
+18:21
+Finished order table insert.
+Prettied up register.py customer insert

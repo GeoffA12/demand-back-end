@@ -48,8 +48,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 newCursor = sqlConnection.cursor()
                 print(username)
                 print(password)
-                newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)",
-                                  (username, password, email, phone))
+                newCursor.execute(f"INSERT INTO customers (username, password, email, phone) VALUES "
+                                  f"({username}, {password}, {email}, {phone})")
                 sqlConnection.commit()
                 responseDict['Success'] = True
 
