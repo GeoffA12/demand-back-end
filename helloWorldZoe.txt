@@ -1,8 +1,0 @@
-public class SoftwareEngineering extends Hell implements Suffering
-{
-	public static void main(String [] args)
-	{
-		// bc I know how much ya'll love the wordiness of java lmaooooo.....
-		System.out.println("Hello world!");
-	}
-}
