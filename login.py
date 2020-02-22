@@ -78,7 +78,7 @@ def main():
     # your server should be running on!
     port = 4001
     # Create an http server using the class and port you defined
-    httpServer = http.server.HTTPServer (('', port),SimpleHTTPRequestHandler)
+    httpServer = http.server.HTTPServer(('', port), SimpleHTTPRequestHandler)
     print("Running on port", port)
     # this next call is blocking! So consult with Devops Coordinator for
     # instructions on how to run without blocking other commands frombeing
