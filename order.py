@@ -32,6 +32,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             type = dictionary['type']
             destination = dictionary['destination']
 
+            print(username)
+
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
             cursor.execute(f'SELECT custid FROM customers WHERE username = ?', username)
