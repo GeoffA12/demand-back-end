@@ -44,7 +44,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             userpass = dict(zip(usernameList, passwordList))
 
             # check all usernames and passwords in the table to make sure we're keeping our usernames unique
-            if userpass[username] == password:
+
+            if username in userpass and userpass[username] == password:
                 status = 200
 
             # We'll send a 401 code back to the client if the user hasn't registered in our database
