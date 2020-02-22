@@ -43,8 +43,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             # are username:password
             userpass = dict(zip(usernameList, passwordList))
 
-            # check all usernames and passwords in the table to make sure we're keeping our usernames unique
-
             if username in userpass and userpass[username] == password:
                 status = 200
 
