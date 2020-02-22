@@ -33,15 +33,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             destination = dictionary['destination']
 
             print(username)
-            print(type)
+            print(sType)
             print(destination)
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
             cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
-            custid = cursor.fetchone()[:-1]
+            custid = cursor.fetchone()[0]
             print(custid)
             if custid is not None:
+                print(custid)
                 cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
                                (custid, sType, destination))
                 sqlConnection.commit()
