@@ -25,7 +25,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         responseDict = {'Success': False}
 
         # If we are receiving a request to log into an account
-        if "/loginHandler" in path:
+        if '/loginHandler' in path:
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
@@ -34,7 +34,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
-            cursor.execute("SELECT username, password FROM customers")
+            cursor.execute('SELECT username, password FROM customers')
             rows = cursor.fetchall()
             usernameList = [x[0] for x in rows]
             passwordList = [x[1] for x in rows]

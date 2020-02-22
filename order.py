@@ -28,21 +28,21 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
-            username = dictionary["username"]
-            type = dictionary["type"]
-            destination = dictionary["destination"]
+            username = dictionary['username']
+            type = dictionary['type']
+            destination = dictionary['destination']
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
-            cursor.execute(f"SELECT custid FROM customers WHERE username = {username}")
+            cursor.execute(f'SELECT custid FROM customers WHERE username = ?', username)
             custid = cursor.fetchall()
-            cursor.execute(f"INSERT INTO orders (custid, type, destination) VALUES "
-                           f"({custid}, {type}, {destination})")
+            cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (?, ?, ?)',
+                           (custid, type, destination))
             sqlConnection.commit()
 
             # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
             # dictionary information.
-            response = requests.post("https://supply.team22.softwareengineeringii.com/vehicleRequest", dictionary)
+            response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
             status = response.status_code
             if status == 200:
                 responseDict['Vehicle Info'] = response.json()
@@ -61,3 +61,20 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         self.wfile.write("response body \r\n")
+
+def main():
+    # Define the port your server will run on:
+    # Using 4001 as an example! Yours may run on another port!
+    # Consult with Devops Coordinator to find out which port
+    # your server should be running on!
+    port = 4003
+    # Create an http server using the class and port you defined
+    httpServer = http.server.HTTPServer(('', port), SimpleHTTPRequestHandler)
+    print("Running on port", port)
+    # this next call is blocking! So consult with Devops Coordinator for
+    # instructions on how to run without blocking other commands frombeing
+    # executed in your terminal!
+    httpServer.serve_forever()
+
+if __name__ == "__main__":
+    main()

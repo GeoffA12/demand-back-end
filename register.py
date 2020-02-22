@@ -25,7 +25,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         responseDict = {'Success': False}
 
         # If we are receiving a request to register an account
-        if "/registerHandler" in path:
+        if '/registerHandler' in path:
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
@@ -36,7 +36,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
-            cursor.execute("SELECT username FROM customers")
+            cursor.execute('SELECT username FROM customers')
             rows = cursor.fetchall()
             usernameList = [x[0] for x in rows]
 
@@ -48,7 +48,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 newCursor = sqlConnection.cursor()
                 print(username)
                 print(password)
-                newCursor.execute("INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)",
+                newCursor.execute('INSERT INTO customers (username, password, email, phone) VALUES (?, ?, ?, ?)',
                                   (username, password, email, phone))
                 sqlConnection.commit()
                 responseDict['Success'] = True
@@ -65,13 +65,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytesStr)
 
     def do_GET(self):
-        print("got")
+        print('got')
         self.send_response(200)
         self.end_headers()
-        self.wfile.write("response body \r\n")
+        self.wfile.write('response body \r\n')
 
     def do_OPTIONS(self):
-        print("options")
+        print('options')
         self.send_response(200)
         self.end_headers()
 
@@ -82,7 +82,7 @@ def main():
     # your server should be running on!
     port = 4002
     # Create an http server using the class and port you defined
-    httpServer = http.server.HTTPServer (('', port),SimpleHTTPRequestHandler)
+    httpServer = http.server.HTTPServer(('', port), SimpleHTTPRequestHandler)
     print("Running on port", port)
     # this next call is blocking! So consult with Devops Coordinator for
     # instructions on how to run without blocking other commands frombeing
