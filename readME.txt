@@ -21,3 +21,6 @@ Prettied up register.py customer insert
 22/2/2020
 14:46
 Added NoneType exception handling for orders
+
+16:05
+Ready to start testing api call. Uncommenting stuff
