@@ -47,7 +47,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                                (custid, sType, destination))
                 sqlConnection.commit()
 
-                # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
+                # Make API call to vehicleRequest, POSTing our landing dictionary. Our API will need partial landing
                 # dictionary information.
                 response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
                 status = response.status_code
