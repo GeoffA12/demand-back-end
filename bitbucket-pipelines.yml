@@ -13,4 +13,4 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - pip install -r requirements.txt
           - python3 login.py
-	  - curl localhost:4003/loginHandler
+          - curl localhost:4003/loginHandler
