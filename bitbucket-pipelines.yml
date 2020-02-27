@@ -9,8 +9,8 @@ pipelines:
   default:
     - step:
         caches:
-          - pip
+          - pip3
         script: # Modify the commands below to build your repository.
-          - pip install -r requirements.txt
+          - pip3 install -r requirements.txt
           - python3 login.py &
           - python3 test_login.py
