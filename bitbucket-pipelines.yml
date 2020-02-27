@@ -12,5 +12,7 @@ pipelines:
           - pip
         script: # Modify the commands below to build your repository.
           - pip3 install -r requirements.txt
+          # We need the ampersand after login.py to ensure that the python file doesn't 
+          # stay forked to the foreground and lock our cursor.
           - python3 login.py &
           - python3 test_login.py
