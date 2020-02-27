@@ -7,7 +7,7 @@ import mysql.connector as sqldb
 
 
 def connectToSQLDB():
-    return sqldb.connect(user='root', password='password', database='team22demand', port=6022)
+    return sqldb.connect(host='demand.team22.softwareengineeringii.com' user='root', password='password', database='team22demand', port=6022)
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     ver = '1.0'
