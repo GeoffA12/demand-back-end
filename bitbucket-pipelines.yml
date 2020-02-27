@@ -13,4 +13,4 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - pip install -r requirements.txt
           - python3 login.py &
-          - curl demand.team22.softwareengineeringii.com:4001/loginHandler
+          - python3 test_login.py
