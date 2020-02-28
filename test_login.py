@@ -1,22 +1,36 @@
 import http.client
+import requests
 import unittest
+
 class Test_Login_Py(unittest.TestCase):
     #Test 200 status response on GET request for login.py
-    def test_stats(self):
-    
-        conn = http.client.HTTPConnection("demand.team22.softwareengineeringii.com:4001")
+    print("Hello")
+    def test_login_get_status(self):
+        url = "https://demand.team22.softwareengineeringii.com/loginHandler"
 
+        payload  = {}
         headers = {
-            'cache-control': "no-cache"
+        'Content-Type': 'application/json'
         }
 
-        conn.request("GET", "/loginHandler", headers=headers)
+        response = requests.request("GET", url, headers=headers, data = payload)
+        statusCode = response.status_code
+        self.assertEqual(statusCode, 200)
 
-        res = conn.getresponse()
-        data = res.status
-        self.assertEqual(data, 200)
+    def test_login_post_status(self):
+        url = "https://demand.team22.softwareengineeringii.com/loginHandler"
+
+        payload = "{\"username\" : \"Notinthedatabase\", \"password\" : \"HAHA\"}"
+        headers = {
+        'Content-Type': 'application/json'
+        }
+
+        response = requests.request("POST", url, headers=headers, data = payload)
+
+        print(response.text.encode('utf8'))
 
 if __name__ == '__main__':
+    print("Main")
     unittest.main()
 
 
