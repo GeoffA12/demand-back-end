@@ -1,6 +1,5 @@
 import http.client
 import requests
-import unittest
 
 class Test_Login_Py(unittest.TestCase):
 
