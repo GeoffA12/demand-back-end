@@ -128,10 +128,29 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytesStr)
 
     def do_GET(self):
+        path = self.path
+        print(path)
+        responseDict = {'Success': False}
+        if '/orderConfirmation' in path:
+            orderid = 123
+            PARAMS = {'oid':orderid}
+            response = requests.get('https://supply.team22.softwareengineeringii.com/etaRequest', PARAMS)
+            data = response.json()
+            status = response.status_code
+            if status == 200:
+                responseDict = data
+        else:
+            status == 404
+            
+            #sqlConnection = connectToSQLDB()
+            #cursor = sqlConnection.cursor()
+            #cursor.execute('SELECT orderid FROM orders WHERE ')
         print('got')
-        self.send_response(200)
+        self.send_response(status)
         self.end_headers()
-        self.wfile.write('response body \r\n')
+        res = json.dumps(responseDict)
+        byteStr = res.encode('utf-8')
+        self.wfile.write(byteStr)
 
     def do_OPTIONS(self):
         print('options')
