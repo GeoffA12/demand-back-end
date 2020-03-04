@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import urllib.parse
 import mysql.connector as sqldb
-
+import requests
 
 
 def connectToSQLDB():
@@ -23,9 +23,34 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         path = self.path
         print(path)
         responseDict = {'Success': False}
+        
+        if '/loginHandler' in path:
+            dictionary = self.getPOSTBody()
+            # To access a specific key from the dictionary:
+            print(dictionary)
+            username = dictionary['username']
+            password = dictionary['password']
+
+            sqlConnection = connectToSQLDB()
+            cursor = sqlConnection.cursor()
+            cursor.execute('SELECT username, password FROM customers')
+            rows = cursor.fetchall()
+            usernameList = [x[0] for x in rows]
+            passwordList = [x[1] for x in rows]
+
+            # Make a dictionary from the usernameList and passwordList where the key:value pairs
+            # are username:password
+            userpass = dict(zip(usernameList, passwordList))
+
+            if username in userpass and userpass[username] == password:
+                status = 200
+
+            # We'll send a 401 code back to the client if the user hasn't registered in our database
+            else:
+                status = 401
 
         # If we are receiving a request to register an account
-        if '/registerHandler' in path:
+        elif '/registerHandler' in path:
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
@@ -53,8 +78,38 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 sqlConnection.commit()
                 responseDict['Success'] = True
 
-            print(status)
+        elif '/orderHandler' in path:
+            dictionary = self.getPOSTBody()
+            # To access a specific key from the dictionary:
+            print(dictionary)
+            username = dictionary['username']
+            sType = dictionary['serviceType']
+            destination = dictionary['destination']
 
+            print(username)
+            print(sType)
+            print(destination)
+
+            sqlConnection = connectToSQLDB()
+            cursor = sqlConnection.cursor()
+            cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
+            custid = cursor.fetchone()[0]
+            print(custid)
+            if custid is not None:
+                print(custid)
+                cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
+                               (custid, sType, destination))
+                sqlConnection.commit()
+
+                # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
+                # dictionary information.
+                response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
+                status = response.status_code
+                # status = 200
+                if status == 200:
+                    responseDict['Vehicle Info'] = response.json()
+            else:
+                status = 400
         else:
             status = 404
 
@@ -80,7 +135,7 @@ def main():
     # Using 4001 as an example! Yours may run on another port!
     # Consult with Devops Coordinator to find out which port
     # your server should be running on!
-    port = 4002
+    port = 4004
     # Create an http server using the class and port you defined
     httpServer = http.server.HTTPServer(('', port), SimpleHTTPRequestHandler)
     print("Running on port", port)
