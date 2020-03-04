@@ -86,6 +86,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             sType = dictionary['serviceType']
             destination = dictionary['destination']
 
+            '''
+            add the current time to the order dictionary
+            attribute will be 'timeOrderMade'
+            '''
+
             print(username)
             print(sType)
             print(destination)
@@ -100,7 +105,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
                                (custid, sType, destination))
                 sqlConnection.commit()
-
+                '''
+                appened customer id into dictionary as well. 
+                attribute will be 'customerID'
+                '''
                 # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
                 # dictionary information.
                 response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
