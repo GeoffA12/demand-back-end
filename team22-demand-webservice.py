@@ -5,7 +5,6 @@ import urllib.parse
 import mysql.connector as sqldb
 import requests
 
-
 def connectToSQLDB():
     return sqldb.connect(user='root', password='password', database='team22demand', port=6022)
 
