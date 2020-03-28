@@ -3,7 +3,11 @@
 class Order():
 
     # Class constructor. Set instance variables below. 
-    # def __init__(self):
+    # Each order instance will have a customer id, service type, and destination.
+    def __init__(self, custid, sType, destination):
+        self.__custid = custid
+        self.__sType = sType
+        self.__destination = destination
         
         
     #Defining our getter methods
@@ -12,16 +16,20 @@ class Order():
     # back end for this 
     # but not sure yet).
     def getCustomerIdOfOrder(self):
-        return self.custid
+        return self.__custid
 
     
     def getOrderType(self):
-        return self.sType
+        return self.__sType
 
     
     def getDestinationAddress(self):
-        return self.destination
+        return self.__destination
 
     
     # toString() method
-    # def __str__(self):
+    def __str__(self):
+        return self.getCustomerIdOfOrder() + " " + self.getOrderType() + " " + self.getDestinationAddress()
+        
+    def getOrderInfo(self):
+        return self.__str__
