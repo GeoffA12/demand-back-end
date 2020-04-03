@@ -30,7 +30,7 @@ class Customer():
     
     # toString() method
     def __str__(self):
-        return self.getUsername() + " " + self.getPassword() + " " + self.getEmail() + " " + self.getPhone()
+        return "Username: " self.getUsername() + " Password: " + self.getPassword() + " Email: " + self.getEmail() + " Phone Numeber: " + self.getPhone()
         
     def getCustomerInfo(self):
         return self.__str__
