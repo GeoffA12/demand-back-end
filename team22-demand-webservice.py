@@ -21,69 +21,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         path = self.path
         print(path)
-        responseDict = {'Success': False}
-        
-        if '/loginHandler' in path:
+        responseDict = {'Success': False} 
+
+        if '/orderHandler' in path:
             dictionary = self.getPOSTBody()
             # To access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
-            password = dictionary['password']
-
-            sqlConnection = connectToSQLDB()
-            cursor = sqlConnection.cursor()
-            cursor.execute('SELECT username, password FROM customers')
-            rows = cursor.fetchall()
-            usernameList = [x[0] for x in rows]
-            passwordList = [x[1] for x in rows]
-
-            # Make a dictionary from the usernameList and passwordList where the key:value pairs
-            # are username:password
-            userpass = dict(zip(usernameList, passwordList))
-
-            if username in userpass and userpass[username] == password:
-                status = 200
-
-            # We'll send a 401 code back to the client if the user hasn't registered in our database
-            else:
-                status = 401
-
-        # If we are receiving a request to register an account
-        elif '/registerHandler' in path:
-            dictionary = self.getPOSTBody()
-            # To access a specific key from the dictionary:
-            print(dictionary)
-            username = dictionary['username']
-            password = dictionary['password']
-            email = dictionary['email']
-            phone = dictionary['phoneNumber']
-
-            sqlConnection = connectToSQLDB()
-            cursor = sqlConnection.cursor()
-            cursor.execute('SELECT username FROM customers')
-            rows = cursor.fetchall()
-            usernameList = [x[0] for x in rows]
-
-            # The equivalent of arr.contains(e)
-            if username in usernameList:
-                status = 401
-            else:
-                status = 200
-                newCursor = sqlConnection.cursor()
-                print(username)
-                print(password)
-                newCursor.execute('INSERT INTO customers (username, password, email, phone) VALUES (%s, %s, %s, %s)',
-                                  (username, password, email, phone))
-                sqlConnection.commit()
-                responseDict['Success'] = True
-
-        elif '/orderHandler' in path:
-            dictionary = self.getPOSTBody()
-            # To access a specific key from the dictionary:
-            print(dictionary)
-            username = dictionary['username']
-            sType = dictionary['serviceType']
+            serviceType = dictionary['serviceType']
             destination = dictionary['destination']
+            timeOrderMade = dictionary['timeOrderMade']
 
             '''
             add the current time to the order dictionary
@@ -91,7 +38,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             '''
 
             print(username)
-            print(sType)
+            print(serviceType)
             print(destination)
 
             sqlConnection = connectToSQLDB()
@@ -100,10 +47,30 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             custid = cursor.fetchone()[0]
             print(custid)
             if custid is not None:
+                humanReadable = destination.pop('humanReabable')
                 print(custid)
                 cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
-                               (custid, sType, destination))
+                               (custid, serviceType, humanReadable))
                 sqlConnection.commit()
+                cursor.execute('SELECT orderid FROM orders WHERE username = %s AND date_ordered = %s', (username,timeOrderMade))
+                orderid = cursor.fetchone()[0]
+                print(orderid)
+                custid = (int)custid
+                orderid = (int)orderid 
+
+                # rebuild post body dictionary
+                orderDict = {
+                    'serviceType': serviceType,
+                    'custid': custid,
+                    'orderid': orderid,
+                    'destination': {
+                        'lat': 123,
+                        'long': 123
+                        },
+                    'timeOrderMade': timeOrderMade
+                    }
+                # serviceType, timeOrderMade, destination (lat,long(floats)), custid(int), orderid(int)
+                
                 '''
                 appened customer id into dictionary as well. 
                 attribute will be 'customerID'
