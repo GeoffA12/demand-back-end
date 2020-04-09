@@ -32,14 +32,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             destination = dictionary['destination']
             timeOrderMade = dictionary['timeOrderMade']
 
-            '''
-            add the current time to the order dictionary
-            attribute will be 'timeOrderMade'
-            '''
-
             print(username)
             print(serviceType)
             print(destination)
+            print(timeOrderMade)
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
