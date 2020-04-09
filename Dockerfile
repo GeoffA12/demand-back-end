@@ -3,6 +3,10 @@ LABEL Team 22
 
 ENV PYTHONUNBUFFERED 1
 
+RUN apk update
+
+RUN apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
+
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r requirements.txt
 
@@ -12,6 +16,8 @@ COPY ./app /app
 
 RUN adduser -D user
 USER user
+
+CMD ["python", "team22-demand-webservice.py"]
 
 
 

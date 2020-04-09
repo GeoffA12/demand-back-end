@@ -5,7 +5,6 @@ chardet==3.0.4
 dnspython==1.16.0
 idna==2.9
 mysql-connector-python==8.0.19
-pkg-resources==0.0.0
 protobuf==3.6.1
 pycparser==2.20
 requests==2.23.0
