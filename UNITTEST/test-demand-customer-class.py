@@ -4,26 +4,25 @@ sys.path.insert(1, '../')
 from customers import Customer
 
 postBody = {
-    'username': username,
-    'email': email,
-    'password': password,
-    'firstname': firstname,
-    'lastname': lastname,
-    'phonenumber': phonenumber
+    'username': 'test',
+    'email': 'test@email.com',
+    'password': 'password',
+    'firstname': 'firstname',
+    'lastname': 'lastname',
+    'phonenumber': '1234567890'
     }
 
 class TestDemandCustomerClass(unittest.TestCase):
 
-    # Write your test cases here
     def testCreateCustomer(self):
         cust = Customer(**postBody)
         
-        self.assertEqual(username, cust.username)
-        self.assertEqual(email, cust.email)
-        self.assertEqual(password, cust.password)
-        self.assertEqual(firstname, cust.firstname)
-        self.assertEqual(lastname, cust.lastname)
-        self.assertEqual(phonenumber, cust.phonenumber)
+        self.assertEqual('test', cust.username)
+        self.assertEqual('test@email.com', cust.email)
+        self.assertEqual('password', cust.password)
+        self.assertEqual('firstname', cust.firstname)
+        self.assertEqual('lastname', cust.lastname)
+        self.assertEqual('1234567890', cust.phonenumber)
         self.assertEqual(custid, cust.custIDs)
         
         print(cust)
@@ -34,7 +33,7 @@ class TestDemandCustomerClass(unittest.TestCase):
         
         self.assertEqual(username, cust.username)
         self.assertEqual(custid, cust.custIDs)
-        # confusion
+        # custid tdb
         
         print(cust)
 

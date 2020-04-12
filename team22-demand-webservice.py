@@ -60,8 +60,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     'custid': custid,
                     'orderid': orderid,
                     'destination': {
-                        'lat': 123,
-                        'long': 123
+                        'lat': 30.2264, #must always be between -90 and 90
+                        'long': -97.7533
                         },
                     'timeOrderMade': timeOrderMade
                     }

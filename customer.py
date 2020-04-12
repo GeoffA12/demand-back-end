@@ -9,7 +9,7 @@ else:
 from account import Account
 
 # Testing Comment from ssh cloned repo
-# Python demand customer class. 
+# Python Demand Customer Class
 # Note that if we decide to use inheritance in this class defintion, (e.g., customer extends User),
 # then we'll need to change our class defintion below
 class Customer(Account):
@@ -21,15 +21,13 @@ class Customer(Account):
         
     def __fetchAssociatedCustIDs(self):
         print()
-        return 'yes'
+        return 'tbd'
     
     @property
     def custIDs(self):
         return self.custIDs
     
     # toString() method
-    #def __str__(self):
-        #return "Username: " self.getUsername() + " Password: " + self.getPassword() + " Email: " + self.getEmail() + " Phone Numeber: " + self.getPhone()
-        
-    #def getCustomerInfo(self):
-        #return self.__str__
+    def __str__(self):
+        return " Username: " + {self._username} + " Email: " + {self._email} + " Password: " + {self._password} + " First Name: " + {self._firstname}+ " Last Name: " + {self._lastname}+ " Phone Number: " + {self._phonenumber} + " Customer ID: " + {self._custIDs}
+

@@ -1,9 +1,9 @@
 
-# Python demand order class. 
+# Python Demand Order Class
 class Order():
 
     # Class constructor. Set instance variables below. 
-    # Each order instance will have a customer id, service type, and destination.
+    # Each order instance will have an order id, customer id, service type, destination, and time order made.
     def __init__(self, orderid, custid, sType, destination, timeOrderMade):
         self._orderid = orderid
         self._custid = custid
@@ -12,11 +12,10 @@ class Order():
         self._timeOrderMade = timeOrderMade
         
         
-    #Defining our getter methods
+    # Defining our getter methods
     # This method might be a bit tricky due to the fact that we'll need to retrieve a piece of data 
     # identifying the user who made the order from the front end (using session storage, might need to change up a little of 
-    # back end for this 
-    # but not sure yet).
+    # back end for this but not sure yet).
     
     @property
     def orderid(self):
@@ -42,6 +41,3 @@ class Order():
     # toString() method
     def __str__(self):
         return "Order ID: " + self.orderid + " Customer ID: "+ + self.getCustomerIdOfOrder() + " Order Type: " + self.getOrderType() + " Destination: " + self.getDestinationAddress() + " Order Made: " + self.getTimeOrderMade
-        
-    def getOrderInfo(self):
-        return self.__str__
