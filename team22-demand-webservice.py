@@ -5,6 +5,7 @@ import urllib.parse
 import mysql.connector as sqldb
 import requests
 
+# move to utils ?!
 def connectToSQLDB():
     return sqldb.connect(user='root', password='password', database='team22demand', port=6022)
 
@@ -25,7 +26,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         if '/orderHandler' in path:
             dictionary = self.getPOSTBody()
-            # To access a specific key from the dictionary:
+            # to access a specific key from the dictionary:
             print(dictionary)
             username = dictionary['username']
             serviceType = dictionary['serviceType']
@@ -40,19 +41,22 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
             cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
-            custid = cursor.fetchone()[0]
+            custid = cursor.fetchone()
             print(custid)
-            if custid is not None:
+            if custid:
+                custid = custid[0]
                 humanReadable = destination.pop('humanReabable')
                 print(custid)
-                cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
+                cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s)',
                                (custid, serviceType, humanReadable))
                 sqlConnection.commit()
                 cursor.execute('SELECT orderid FROM orders WHERE username = %s AND date_ordered = %s', (username,timeOrderMade))
                 orderid = cursor.fetchone()[0]
                 print(orderid)
-                custid = (int)custid
-                orderid = (int)orderid 
+                custid = int(custid)
+                orderid = int(orderid)
+                
+                lat,long = destination['lat'], destination['long']
 
                 # rebuild post body dictionary
                 orderDict = {
@@ -60,8 +64,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     'custid': custid,
                     'orderid': orderid,
                     'destination': {
-                        'lat': 30.2264, #must always be between -90 and 90
-                        'long': -97.7533
+                        'lat': lat, #must always be between -90 and 90
+                        'long': long
                         },
                     'timeOrderMade': timeOrderMade
                     }
