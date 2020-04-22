@@ -50,13 +50,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s, %s)',
                                (custid, serviceType.lower(), humanReadable, timeOrderMade))
                 sqlConnection.commit()
-                cursor.execute('SELECT orderid FROM orders WHERE username = %s AND date_ordered = %s', (username,timeOrderMade))
+                cursor.execute('SELECT orderid FROM orders WHERE (username = %s OR email = %s) AND date_ordered = %s', (username,username,timeOrderMade))
                 orderid = cursor.fetchone()[0]
                 print(orderid)
                 custid = int(custid)
                 orderid = int(orderid)
                 
-                lat,long = destination['lat'], destination['long']
+                lat,long = destination['lat'], destination['lon']
 
                 # rebuild post body dictionary
                 orderDict = {
@@ -65,7 +65,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     'orderid': orderid,
                     'destination': {
                         'lat': lat, #must always be between -90 and 90
-                        'long': long
+                        'lon': long
                         },
                     'timeOrderMade': timeOrderMade
                     }
