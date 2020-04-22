@@ -40,7 +40,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
             sqlConnection = connectToSQLDB()
             cursor = sqlConnection.cursor()
-            cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
+            cursor.execute('SELECT custid FROM customers WHERE username = %s OR email = %s', (username,username))
             custid = cursor.fetchone()
             print(custid)
             if custid:
