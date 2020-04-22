@@ -50,7 +50,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s, %s)',
                                (custid, serviceType.lower(), humanReadable, timeOrderMade))
                 sqlConnection.commit()
-                cursor.execute('SELECT orderid FROM orders WHERE (username = %s OR email = %s) AND date_ordered = %s', (username,username,timeOrderMade))
+                cursor.execute('SELECT orderid FROM orders WHERE custid = %s AND date_ordered = %s', (custid,timeOrderMade))
                 orderid = cursor.fetchone()[0]
                 print(orderid)
                 custid = int(custid)
