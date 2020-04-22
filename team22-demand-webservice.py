@@ -24,7 +24,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         print(path)
         responseDict = {'Success': False} 
 
-        if '/orderHandler' in path:
+        if '/demand/order/req' in path:
             dictionary = self.getPOSTBody()
             # to access a specific key from the dictionary:
             print(dictionary)
