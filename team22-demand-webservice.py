@@ -78,6 +78,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
                 # dictionary information.
                 print(orderDict)
+                orderDict = json.dumps(orderDict)
                 response = requests.post('https://supply.team22.softwareengineeringii.com/supply/vehicles/req', orderDict)
                 status = response.status_code
                 # status = 200
