@@ -47,7 +47,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 custid = custid[0]
                 humanReadable = destination.pop('humanReadable')
                 print(custid)
-                cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s)',
+                cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s, %s)',
                                (custid, serviceType.lower(), humanReadable, timeOrderMade))
                 sqlConnection.commit()
                 cursor.execute('SELECT orderid FROM orders WHERE username = %s AND date_ordered = %s', (username,timeOrderMade))
