@@ -45,7 +45,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             print(custid)
             if custid:
                 custid = custid[0]
-                humanReadable = destination.pop('humanReabable')
+                humanReadable = destination.pop('humanReadable')
                 print(custid)
                 cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s)',
                                (custid, serviceType, humanReadable))
