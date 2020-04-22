@@ -38,21 +38,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             print(destination)
             print(timeOrderMade)
 
-            # sqlConnection = databaseutils.connectToSQLDB()
-            # cursor = sqlConnection.cursor()
-            # cursor.execute('SELECT custid FROM customers WHERE username = %s OR email = %s', (username,username))
-            # custid = cursor.fetchone()
             custid = databaseutils.getCustomerIDByCredentials(username)
             print(custid)
             if custid is not None:
                 custid = custid[0]
                 humanReadable = destination.pop('humanReadable')
                 print(custid)
-                # cursor.execute('INSERT INTO orders VALUES (Null, %s, %s, %s, %s)',
-                #                (custid, serviceType.lower(), humanReadable, timeOrderMade))
-                # sqlConnection.commit()
-                # cursor.execute('SELECT orderid FROM orders WHERE custid = %s AND date_ordered = %s', (custid,timeOrderMade))
-                # orderid = cursor.fetchone()[0]
                 orderData = (custid, serviceType.value, humanReadable, timeOrderMade,)
                 databaseutils.storeOrder(orderData)
 
