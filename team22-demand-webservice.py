@@ -31,7 +31,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             username = dictionary['username']
             serviceType = dictionary['serviceType']
             destination = dictionary['destination']
-            timeOrderMade = dictionary['timeOrderMade'][:-1]
+            timeOrderMade = dictionary['timeOrderMade'][:-5]
 
             print(username)
             print(serviceType)
