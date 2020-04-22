@@ -12,7 +12,7 @@ def connectToSQLDB():
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     ver = '1.0'
 
-    # How to convert the body from a string to a dictionary
+    # how to convert the body from a string to a dictionary
     # use 'loads' to convert from byte/string to a dictionary!
     def getPOSTBody(self):
         length = int(self.headers['content-length'])
