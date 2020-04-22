@@ -53,7 +53,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 # sqlConnection.commit()
                 # cursor.execute('SELECT orderid FROM orders WHERE custid = %s AND date_ordered = %s', (custid,timeOrderMade))
                 # orderid = cursor.fetchone()[0]
-                orderData = (custid, serviceType.lower(), humanReadable, timeOrderMade,)
+                orderData = (custid, serviceType.value, humanReadable, timeOrderMade,)
                 databaseutils.storeOrder(orderData)
 
                 data = (custid, timeOrderMade,)
@@ -67,7 +67,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
                 # rebuild post body dictionary
                 orderDict = {
-                    'serviceType': serviceType,
+                    'serviceType': serviceType.name,
                     'custid': custid,
                     'orderid': orderid,
                     'destination': {
