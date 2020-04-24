@@ -14,8 +14,9 @@ pipelines:
           - apt-get update && apt-get upgrade
           - apt-get install python3.6
           - apt-get install build-essential --yes
-          - apk update
-          - apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
+          #- apt-get install 
+          #- apk update
+          #- apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
           - pip install -r requirements.txt
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
