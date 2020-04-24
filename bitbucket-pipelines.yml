@@ -18,6 +18,7 @@ pipelines:
           # stay forked to the foreground and lock our cursor.
           - cd ../
           - mkdir repos
+          - pwd
           - cd unittest
           - python3 test_demand_order_class.py
           - python3 test_demand_customer_class.py
