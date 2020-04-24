@@ -16,5 +16,6 @@ pipelines:
           - pip install -r requirements.txt
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
-          - python3 unittest/test-demand-customer-class.py &
-          - python3 unittest/test-demand-order-class.py
+          - cd unittest
+          - python3 test-demand-customer-class.py &
+          - python3 test-demand-order-class.py

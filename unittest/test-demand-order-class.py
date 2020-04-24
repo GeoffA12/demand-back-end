@@ -1,6 +1,6 @@
 import unittest
 import sys
-from test.test_copy import order_comparisons
+#from test.test_copy import order_comparisons
 sys.path.insert(1, '../')
 from order import Order
 from enums.servicetype import ServiceType
