@@ -1,90 +1,41 @@
-import http.server
-from http.server import BaseHTTPRequestHandler
-import json
-import urllib.parse
-import mysql.connector as sqldb
-import requests
 
+# Python Demand Order Class
+class Order():
 
-def connectToSQLDB():
-    return sqldb.connect(user='root', password='password', database='team22demand', port=6022)
+    # Class constructor. Set instance variables below. 
+    # Each order instance will have an order id, customer id, service type, destination, and time order made.
+    def __init__(self, custid, sType, destination, timeOrderMade):
+        #self._orderid = orderid
+        self._custid = custid
+        self._sType = sType
+        self._destination = destination
+        self._timeOrderMade = timeOrderMade
+        
+        
+    # Defining our getter methods
+    # this method might be a bit tricky due to the fact that we'll need to retrieve a piece of data 
+    # identifying the user who made the order from the front end (using session storage, might need to change up a little of back end for this but not sure yet).
+    
+    #@property
+    #def orderid(self):
+        #return self._orderid
+        
+    @property
+    def custid(self):
+        return self._custid
 
-class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    ver = '1.0'
+    @property
+    def serviceType(self):
+        return self._sserviceType
 
-    # How to convert the body from a string to a dictionary
-    # use 'loads' to convert from byte/string to a dictionary!
-    def getPOSTBody(self):
-        length = int(self.headers['content-length'])
-        body = self.rfile.read(length)
-        return json.loads(body)
-
-    def do_POST(self):
-        path = self.path
-        print(path)
-        responseDict = {'Success': False, 'Vehicle Info': None}
-
-        if '/orderHandler' in path:
-            dictionary = self.getPOSTBody()
-            # To access a specific key from the dictionary:
-            print(dictionary)
-            username = dictionary['username']
-            sType = dictionary['serviceType']
-            destination = dictionary['destination']
-
-            print(username)
-            print(sType)
-            print(destination)
-
-            sqlConnection = connectToSQLDB()
-            cursor = sqlConnection.cursor()
-            cursor.execute('SELECT custid FROM customers WHERE username = %s', (username,))
-            custid = cursor.fetchone()[0]
-            print(custid)
-            if custid is not None:
-                print(custid)
-                cursor.execute('INSERT INTO orders (custid, type, destination) VALUES (%s, %s, %s)',
-                               (custid, sType, destination))
-                sqlConnection.commit()
-
-                # Make API call to vehicleRequest, POSTing our order dictionary. Our API will need partial order
-                # dictionary information.
-                response = requests.post('https://supply.team22.softwareengineeringii.com/vehicleRequest', dictionary)
-                status = response.status_code
-                # status = 200
-                if status == 200:
-                    responseDict['Vehicle Info'] = response.json()
-            else:
-                status = 400
-        else:
-            status = 404
-
-        print(status)
-        self.send_response(status)
-        self.end_headers()
-        res = json.dumps(responseDict)
-        bytesStr = res.encode('utf-8')
-        self.wfile.write(bytesStr)
-
-    def do_GET(self):
-        print("got")
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write("response body \r\n")
-
-def main():
-    # Define the port your server will run on:
-    # Using 4001 as an example! Yours may run on another port!
-    # Consult with Devops Coordinator to find out which port
-    # your server should be running on!
-    port = 4003
-    # Create an http server using the class and port you defined
-    httpServer = http.server.HTTPServer(('', port), SimpleHTTPRequestHandler)
-    print("Running on port", port)
-    # this next call is blocking! So consult with Devops Coordinator for
-    # instructions on how to run without blocking other commands frombeing
-    # executed in your terminal!
-    httpServer.serve_forever()
-
-if __name__ == "__main__":
-    main()
+    @property
+    def destination(self):
+        return self._destination
+        
+    @property
+    def timeOrderMade(self):
+        return self._timeOrderMade
+    
+    # toString() method
+    def __str__(self):
+        return "Customer ID: " + self.custid() + " Order Type: " + self.serviceType() + " Destination: " + self.destination() + " Order Made: " + self.timeOrderMade()
