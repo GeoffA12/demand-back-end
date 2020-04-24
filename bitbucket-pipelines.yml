@@ -17,7 +17,7 @@ pipelines:
           #- apt-get install 
           #- apk update
           #- apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
-          - apt install python3-pip
+          - apt install python3-pip --yes
           - pip3 install -r requirements.txt
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
