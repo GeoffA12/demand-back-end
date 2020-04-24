@@ -16,6 +16,7 @@ pipelines:
           - pip install -r requirements.txt
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
+          - pwd
           - cd ../
           - mkdir repos
           - pwd
