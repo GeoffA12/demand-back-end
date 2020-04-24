@@ -17,9 +17,10 @@ pipelines:
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
           - pwd
+          - ls
           - cd ../
-          - mkdir repos
-          - pwd
+          - mkdir csGoesHere
+          - ls
           - cd unittest
           - python3 test_demand_order_class.py
           - python3 test_demand_customer_class.py
