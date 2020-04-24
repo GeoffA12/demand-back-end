@@ -7,3 +7,4 @@ Experimenting/
 htmlcov/
 *.coverage
 *.env
+__init__.py
