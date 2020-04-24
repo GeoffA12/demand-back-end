@@ -3,15 +3,17 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: python:3.6-alpine
+image: ubuntu
 
 pipelines:
   default:
     - step:
         caches:
-          - pip
-          - git
+          #- pip
         script: # Modify the commands below to build your repository.
+          - apt-get update && upgrade
+          - apt-get install python3.6
+          - apt-get install build-essential
           - apk update
           - apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
           - pip install -r requirements.txt
@@ -19,6 +21,7 @@ pipelines:
           # stay forked to the foreground and lock our cursor.
           - ls
           - cd ../
+          - apt-get install git
           - git clone git@bitbucket.org:swei_team22/common-services.git
           - ls
           - cd build
