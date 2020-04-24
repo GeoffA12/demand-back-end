@@ -4,9 +4,10 @@ class Order():
 
     # Class constructor. Set instance variables below. 
     # Each order instance will have an order id, customer id, service type, destination, and time order made.
-    def __init__(self, custid, sType, destination, timeOrderMade):
+    def __init__(self, custid, orderid, sType, destination, timeOrderMade):
         #self._orderid = orderid
         self._custid = custid
+        self._orderid = orderid
         self._sType = sType
         self._destination = destination
         self._timeOrderMade = timeOrderMade
@@ -23,10 +24,15 @@ class Order():
     @property
     def custid(self):
         return self._custid
+    
+    @property
+    def orderid(self):
+        return self._orderid
+
 
     @property
     def serviceType(self):
-        return self._sserviceType
+        return self._sType
 
     @property
     def destination(self):
@@ -38,4 +44,4 @@ class Order():
     
     # toString() method
     def __str__(self):
-        return "Customer ID: " + self.custid() + " Order Type: " + self.serviceType() + " Destination: " + self.destination() + " Order Made: " + self.timeOrderMade()
+        return "Customer ID: " + str(self.custid) + "Order ID: " + str(self.orderid) + " Order Type: " + str(self.serviceType) + " Destination: " + self.destination + " Order Made: " + self.timeOrderMade
