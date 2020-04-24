@@ -4,7 +4,6 @@
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: python:3.6-alpine
-image: ubuntu:latest
 
 pipelines:
   default:
@@ -19,8 +18,8 @@ pipelines:
           # stay forked to the foreground and lock our cursor.
           - ls
           - cd ../
-          - sudo apt update
-          - sudo apt install git
+          - apt update
+          - apt install git
           - git clone git@bitbucket.org:swei_team22/common-services.git
           - ls
           - cd build
