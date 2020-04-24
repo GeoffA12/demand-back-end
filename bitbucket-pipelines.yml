@@ -10,6 +10,7 @@ pipelines:
     - step:
         caches:
           - pip
+          - git
         script: # Modify the commands below to build your repository.
           - apk update
           - apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
@@ -18,8 +19,6 @@ pipelines:
           # stay forked to the foreground and lock our cursor.
           - ls
           - cd ../
-          - apt update
-          - apt install git
           - git clone git@bitbucket.org:swei_team22/common-services.git
           - ls
           - cd build
