@@ -16,11 +16,11 @@ pipelines:
           - pip install -r requirements.txt
           # We need the ampersand after login.py to ensure that the python file doesn't 
           # stay forked to the foreground and lock our cursor.
-          - pwd
           - ls
           - cd ../
-          - mkdir csGoesHere
+          - git clone git@bitbucket.org:swei_team22/common-services.git
           - ls
+          - cd build
           - cd unittest
           - python3 test_demand_order_class.py
           - python3 test_demand_customer_class.py
