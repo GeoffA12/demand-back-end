@@ -20,7 +20,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         status = 404
         path = self.path
         print(path)
-        responseDict = {'Success': False}
+        responseDict = {}
 
         if '/demand/order/req' in path:
             status = 400
@@ -73,7 +73,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         orderDict)
                 status = response.status_code
                 if status == 200:
-                    responseDict['Vehicle Info'] = response.json()
+                    responseDict = response.json()
 
         self.send_response(status)
         self.end_headers()
