@@ -45,10 +45,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 humanReadable = destination.pop('humanReadable')
                 print(custid)
                 orderData = (custid, serviceType.value, humanReadable, timeOrderMade,)
-                databaseutils.storeOrder(orderData)
-
-                data = (custid, timeOrderMade,)
-                orderid = databaseutils.getOrderID(data)
+                orderid = databaseutils.storeOrder(orderData)
 
                 print(orderid)
                 custid = int(custid)
