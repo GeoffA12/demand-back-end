@@ -1,4 +1,10 @@
 *.DS_Store
-*/.ideas
-*/__pycache__
+.ideas/
+__pycache__/
+Experimenting/
 *.xml
+*.pyc
+htmlcov/
+*.coverage
+*.env
+__init__.py
