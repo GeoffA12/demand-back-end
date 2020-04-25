@@ -33,10 +33,13 @@ def storeOrder(orderData):
 
     statement = 'INSERT INTO orders VALUES (Null, %s, %s, %s, %s)'
     cursor.execute(statement, orderData)
+    orderID = cursor.lastrowid
     sqlConnection.commit()
 
     cursor.close()
     sqlConnection.close()
+
+    return orderID
 
 
 def getOrderID(data):
